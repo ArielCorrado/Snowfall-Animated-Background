@@ -4,13 +4,21 @@ const random = (min, max) => {
     return randomMinMax;
 }
 
+const randomMM = () => {
+    const random01 = Math.random();
+    random01 > 0.5 ? "+" : "-";
+}
+
+
 /* OPTIONS */
 
 const flakesMaxSeparation = 100;   // px 
+const flakesMaxTranslationX = 500;   // px
 const minScreenCrossTime = 10;     // seg  
 const maxScreenCrossTime = 25;    // seg  
 const minflakeDiametter = 5;      // px
-const maxflakeDiametter = 10;     // px
+const maxflakeDiametter = 15;     // px
+
 
 const createFlake = (xpos) => {
     const flake = document.createElement("div");
@@ -21,13 +29,14 @@ const createFlake = (xpos) => {
     const opacityOP = (screenCrossTime - minScreenCrossTime) / (maxScreenCrossTime - minScreenCrossTime);       //Seteamos la opacidad en función de la velocidad: a mas velocidad menor opacidad
     const opacity = 1 - opacityOP;                                                                              //Invertimos la relacion: a mas velocidad mas opacidad (mas blanco) (copo mas cercano)
 
-    const diametterOP = ((screenCrossTime - minScreenCrossTime) * (maxflakeDiametter - minflakeDiametter) / (maxScreenCrossTime - minScreenCrossTime)) + minflakeDiametter;
-    const diametter = (maxflakeDiametter * minflakeDiametter) / diametterOP;
+    const diametterOP = ((screenCrossTime - minScreenCrossTime) * (maxflakeDiametter - minflakeDiametter) / (maxScreenCrossTime - minScreenCrossTime)) + minflakeDiametter;     //Diametro inversamente proporcional a la velocidad
+    const diametter = (maxflakeDiametter * minflakeDiametter) / diametterOP;                                                                                                    //Diametro proporcional a la velocidad (a mayor diametro, mas velocidad: copo mas cercano)
     
     flake.animate([
         // keyframes
-        { transform: `translateY(${window.innerHeight * 1.1}px)` }
-    ], {
+        { transform: `translateY(0) translateX(0)`},
+        { transform: `translateY(${window.innerHeight * 1.1}px) translateX(${flakesMaxTranslationX * Math.random()}px)`}
+    ],{
         // timing options
         duration: screenCrossTimeMs,
         timingFunction: "linear",
@@ -54,6 +63,7 @@ const createSnowFall = () => {
         createFlake(x);
     }
 }
+
 
 setInterval(() => {
     createSnowFall();    
