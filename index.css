@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+}
+
+.container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(26, 22, 75);
+    overflow: hidden;
+}
+
+.flake {
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+}
+
