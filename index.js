@@ -1,33 +1,30 @@
-const random = (min, max) => {
+const randomMinMax = (min, max) => {
     const random01 = Math.random();
-    const randomMinMax = (random01 * max) + ( min * ( 1 - random01 ));
-    return randomMinMax;
-}
-
-const randomMM = () => {
-    const random01 = Math.random();
-    random01 > 0.5 ? "+" : "-";
+    const random = (random01 * max) + ( min * ( 1 - random01 ));
+    return random;
 }
 
 
 /* OPTIONS */
-
 const flakesMaxSeparation = 100;   // px 
-const flakesMaxTranslationX = 500;   // px
+const flakesMaxTranslationX = 500; // px
 const minScreenCrossTime = 10;     // seg  
-const maxScreenCrossTime = 25;    // seg  
-const minflakeDiametter = 5;      // px
-const maxflakeDiametter = 15;     // px
+const maxScreenCrossTime = 25;     // seg  
+const minflakeDiametter = 5;       // px
+const maxflakeDiametter = 15;      // px
+const flakeMaxOpacity = 0.75;      // 0 - 1
+const flakeWavesInterval = 1;      // seg 
 
 
 const createFlake = (xpos) => {
     const flake = document.createElement("div");
     
-    const screenCrossTime = random(minScreenCrossTime, maxScreenCrossTime);
+    const screenCrossTime = randomMinMax(minScreenCrossTime, maxScreenCrossTime);
     const screenCrossTimeMs = screenCrossTime * 1000;
 
     const opacityOP = (screenCrossTime - minScreenCrossTime) / (maxScreenCrossTime - minScreenCrossTime);       //Seteamos la opacidad en función de la velocidad: a mas velocidad menor opacidad
-    const opacity = 1 - opacityOP;                                                                              //Invertimos la relacion: a mas velocidad mas opacidad (mas blanco) (copo mas cercano)
+    const opacityCorrection = 1 - opacityOP;                                                                    //Invertimos la relacion: a mas velocidad mas opacidad (mas blanco) (copo mas cercano)
+    const opacity = opacityCorrection * flakeMaxOpacity;
 
     const diametterOP = ((screenCrossTime - minScreenCrossTime) * (maxflakeDiametter - minflakeDiametter) / (maxScreenCrossTime - minScreenCrossTime)) + minflakeDiametter;     //Diametro inversamente proporcional a la velocidad
     const diametter = (maxflakeDiametter * minflakeDiametter) / diametterOP;                                                                                                    //Diametro proporcional a la velocidad (a mayor diametro, mas velocidad: copo mas cercano)
@@ -67,7 +64,7 @@ const createSnowFall = () => {
 
 setInterval(() => {
     createSnowFall();    
-}, 1000);
+}, flakeWavesInterval * 1000);
 
 
 
